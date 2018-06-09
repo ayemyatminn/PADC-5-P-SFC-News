@@ -1,7 +1,11 @@
 package com.padcmyanmar.sfc.activities;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
@@ -18,6 +22,8 @@ import com.padcmyanmar.sfc.adapters.NewsAdapter;
 import com.padcmyanmar.sfc.components.EmptyViewPod;
 import com.padcmyanmar.sfc.components.SmartRecyclerView;
 import com.padcmyanmar.sfc.components.SmartScrollListener;
+import com.padcmyanmar.sfc.data.models.NewsModel;
+import com.padcmyanmar.sfc.data.vo.NewsVO;
 import com.padcmyanmar.sfc.delegates.NewsItemDelegate;
 import com.padcmyanmar.sfc.events.RestApiEvents;
 import com.padcmyanmar.sfc.events.TapNewsEvent;
@@ -27,6 +33,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +53,8 @@ public class NewsListActivity extends BaseActivity
     private SmartScrollListener mSmartScrollListener;
 
     private NewsAdapter mNewsAdapter;
+
+    private NewsModel mNewsmodel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +87,22 @@ public class NewsListActivity extends BaseActivity
         });
 
         //rvNews.setEmptyView(vpEmptyNews);
+
+        mNewsmodel= ViewModelProviders.of(this).get(NewsModel.class);
+        mNewsmodel.initDatabase(this);
+        mNewsmodel.getNews().observe(this, new Observer<List<NewsVO>>() {
+            @Override
+            public void onChanged(@Nullable List<NewsVO> newsVOS) {
+                mNewsAdapter.setNewData(newsVOS);
+            }
+        });
+
+
         rvNews.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         mNewsAdapter = new NewsAdapter(getApplicationContext(), this);
         rvNews.setAdapter(mNewsAdapter);
+
+
 
         mSmartScrollListener = new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
             @Override
@@ -98,6 +120,8 @@ public class NewsListActivity extends BaseActivity
         intent.putExtra("NewsId", 123);
         intent.putExtra("NEWSID", 123);
         startActivity(intent);
+
+
     }
 
     @Override
