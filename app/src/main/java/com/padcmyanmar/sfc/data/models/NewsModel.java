@@ -24,17 +24,18 @@ import java.util.List;
  * Created by aung on 12/3/17.
  */
 
-public class NewsModel extends ViewModel {
+public class NewsModel {
 
     private static NewsModel objInstance;
     private AppDatabase mAppDatabase;
 
-    private List<NewsVO> mNews;
     private int mmNewsPageIndex = 1;
 
     private NewsModel() {
         EventBus.getDefault().register(this);
-        mNews = new ArrayList<>();
+//        startLoadingMMNews();
+
+
     }
 
     public static NewsModel getInstance() {
@@ -56,20 +57,22 @@ public class NewsModel extends ViewModel {
         MMNewsDataAgentImpl.getInstance().loadMMNews(AppConstants.ACCESS_TOKEN, mmNewsPageIndex);
     }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this);
-        }
-        AppDatabase.destroyInstance();
-    }
 
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNewsDataLoaded(RestApiEvents.NewsDataLoadedEvent event) {
-        mAppDatabase.newsDao().deleteAll();
-        long[] insertedIds = mAppDatabase.newsDao().insertNews(event.getLoadNews().toArray(new NewsVO[0]));
-        Log.d(SFCNewsApp.LOG_TAG, "Total inserted count : " + insertedIds.length);
+
+
+
+        for(NewsVO news :event.getLoadNews()){
+            mAppDatabase.publicationDao().insertPubcation(news.getPublication());
+            //Log.d(SFCNewsApp.LOG_TAG,"Total insert count:" + insertPublication);
+            mAppDatabase.publicationDao().getAllPublication();
+        }
+
+//        long[] insertedIds = mAppDatabase.newsDao().insertNews(event.getLoadNews().toArray(new NewsVO[0]));
+//        Log.d(SFCNewsApp.LOG_TAG, "Total inserted count : " + insertedIds.length);
+
+
 
     }
 

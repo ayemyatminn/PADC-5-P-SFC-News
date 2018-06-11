@@ -88,15 +88,17 @@ public class NewsListActivity extends BaseActivity
 
         //rvNews.setEmptyView(vpEmptyNews);
 
-        mNewsmodel= ViewModelProviders.of(this).get(NewsModel.class);
-        mNewsmodel.initDatabase(this);
-        mNewsmodel.getNews().observe(this, new Observer<List<NewsVO>>() {
-            @Override
-            public void onChanged(@Nullable List<NewsVO> newsVOS) {
-                mNewsAdapter.setNewData(newsVOS);
-            }
-        });
+//        mNewsmodel= ViewModelProviders.of(this).get(NewsModel.class);
+//        mNewsmodel.initDatabase(this);
+//        mNewsmodel.getNews().observe(this, new Observer<List<NewsVO>>() {
+//            @Override
+//            public void onChanged(@Nullable List<NewsVO> newsVOS) {
+//                mNewsAdapter.setNewData(newsVOS);
+//            }
+//        });
 
+        //NewsModel.getInstance().startLoadingMMNews();
+        //NewsModel.getInstance().initDatabase(this);
 
         rvNews.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         mNewsAdapter = new NewsAdapter(getApplicationContext(), this);

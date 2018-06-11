@@ -1,9 +1,11 @@
 package com.padcmyanmar.sfc.data.vo;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -16,17 +18,20 @@ import java.util.List;
  * Created by aung on 12/2/17.
  */
 
-@Entity(tableName = "News")
+@Entity(tableName = "News",foreignKeys = @ForeignKey(entity = PublicationVO.class,parentColumns = "Publication_ID",childColumns = "Publication_Id"))
 public class NewsVO {
 
-    @NotNull
+    @NonNull
     @PrimaryKey
+    @ColumnInfo(name = "News_ID")
     @SerializedName("news-id")
     private String newsId;
 
+    @ColumnInfo(name = "Brief")
     @SerializedName("brief")
     private String brief;
 
+    @ColumnInfo(name = "Details")
     @SerializedName("details")
     private String details;
 
@@ -34,12 +39,29 @@ public class NewsVO {
     @SerializedName("images")
     private List<String> images;
 
+    @ColumnInfo(name = "Posted_Date")
     @SerializedName("posted-date")
     private String postedDate;
 
     @Ignore
     @SerializedName("publication")
     private PublicationVO publication;
+
+    @ColumnInfo(name = "Publication_Id")
+    private String publicationId;
+
+    public String getPublicationId() {
+        if (publication!=null){
+            return publication.getPublicationId();
+        }
+        return null;
+    }
+
+    public void setPublicationId(String publicationId) {
+        this.publicationId = publicationId;
+    }
+
+
 
     @Ignore
     @SerializedName("favorites")

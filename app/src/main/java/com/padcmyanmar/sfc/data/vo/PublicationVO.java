@@ -1,5 +1,6 @@
 package com.padcmyanmar.sfc.data.vo;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
@@ -17,11 +18,14 @@ public class PublicationVO {
     @NotNull
     @PrimaryKey
     @SerializedName("publication_id")
+    @ColumnInfo(name = "Publication_ID")
     private String publicationId;
 
+    @ColumnInfo(name = "Title")
     @SerializedName("title")
     private String title;
 
+    @ColumnInfo(name = "Logo")
     @SerializedName("logo")
     private String logo;
 

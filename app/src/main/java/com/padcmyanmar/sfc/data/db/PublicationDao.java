@@ -7,6 +7,7 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
 import com.padcmyanmar.sfc.data.vo.NewsVO;
+import com.padcmyanmar.sfc.data.vo.PublicationVO;
 
 import java.util.List;
 
@@ -15,17 +16,18 @@ import java.util.List;
  */
 
 @Dao
-public interface NewsDao {
+public interface PublicationDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    long insertNewsId(NewsVO newsVO);
+    long[] insertPublication(PublicationVO...publicationVO);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    long[] insertNews(NewsVO... newsVO);
+    long insertPubcation(PublicationVO publicationVO);
 
-    @Query("SELECT * FROM News")
-    LiveData<List<NewsVO>> getAllNews();
+    @Query("SELECT * FROM Publication")
+    LiveData<List<PublicationVO>> getAllPublication();
 
-    @Query("DELETE FROM News")
+
+    @Query("DELETE FROM Publication")
     void deleteAll();
 }

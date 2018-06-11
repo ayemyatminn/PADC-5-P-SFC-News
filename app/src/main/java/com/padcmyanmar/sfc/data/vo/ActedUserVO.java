@@ -3,6 +3,7 @@ package com.padcmyanmar.sfc.data.vo;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -15,8 +16,9 @@ import org.jetbrains.annotations.NotNull;
 @Entity(tableName = "Acted_Users")
 public class ActedUserVO {
 
-    @NotNull
+    @NonNull
     @PrimaryKey
+    @ColumnInfo(name = "User_ID")
     @SerializedName("user_id")
     private String userId;
 
