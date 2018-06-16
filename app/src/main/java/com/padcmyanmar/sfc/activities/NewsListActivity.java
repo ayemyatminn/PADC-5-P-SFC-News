@@ -11,10 +11,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.padcmyanmar.sfc.R;
 import com.padcmyanmar.sfc.SFCNewsApp;
@@ -34,9 +36,16 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 
 public class NewsListActivity extends BaseActivity
         implements NewsItemDelegate {
@@ -53,6 +62,8 @@ public class NewsListActivity extends BaseActivity
     private SmartScrollListener mSmartScrollListener;
 
     private NewsAdapter mNewsAdapter;
+
+    private PublishSubject<List<NewsVO>> mNewsSubject;
 
     private NewsModel mNewsmodel;
 
@@ -97,8 +108,36 @@ public class NewsListActivity extends BaseActivity
 //            }
 //        });
 
-        //NewsModel.getInstance().startLoadingMMNews();
-        //NewsModel.getInstance().initDatabase(this);
+        mNewsSubject=PublishSubject.create();
+        mNewsSubject.subscribe(new io.reactivex.Observer<List<NewsVO>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(List<NewsVO> newsVOS) {
+                Log.d(SFCNewsApp.LOG_TAG, "onNext: " + newsVOS.size());
+                mNewsAdapter.appendNewData(newsVOS);
+
+                processPrimeSingle();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
+        mNewsmodel.initPublishSubject(mNewsSubject);
+        mNewsmodel.startLoadingMMNews();
+
+
 
         rvNews.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         mNewsAdapter = new NewsAdapter(getApplicationContext(), this);
@@ -124,6 +163,59 @@ public class NewsListActivity extends BaseActivity
         startActivity(intent);
 
 
+    }
+
+    private void processPrimeSingle(){
+        Single<String> prime=Single.fromCallable(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                int number[]=new int[]{2,5,10,15,20,131};
+                return calculatePrimeNumber(number);
+            }
+        });
+
+        prime
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String primeString) {
+                        Toast.makeText(NewsListActivity.this, "Prime number : " + primeString, Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+    }
+
+    private String calculatePrimeNumber(int...numbers){
+        String primenumber="";
+        for (int i=0;i<numbers.length;i++){
+            if (numbers[i]==2 || isPrime(numbers[i])){
+            primenumber=primenumber + numbers[i] + ",";}
+        }
+
+        if (!TextUtils.isEmpty(primenumber) && primenumber.contains(",")){
+            primenumber=primenumber.substring(0,primenumber.lastIndexOf(","));
+        }
+
+        return primenumber;
+    }
+
+    private boolean isPrime(int number){
+        for (int i=2;i<number;i++){
+            if (number % i ==0){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
