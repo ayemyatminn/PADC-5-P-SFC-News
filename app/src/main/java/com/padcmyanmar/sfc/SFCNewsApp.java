@@ -31,26 +31,4 @@ public class SFCNewsApp extends Application {
         //NewsModel.getInstance().startLoadingMMNews();
     }
 
-    public MMNewsAPI getTheNewsApi() {
-        initMMNewsApi();
-        return theNewsApi;
-    }
-
-    private void initMMNewsApi() {
-
-        final OkHttpClient okHttpClient=new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30,TimeUnit.SECONDS)
-                .readTimeout(30,TimeUnit.SECONDS)
-                .build();
-
-        Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl(AppConstants.MMNEWS_NEWS_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(new Gson()))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .client(okHttpClient)
-                .build();
-
-        theNewsApi=retrofit.create(MMNewsAPI.class);
-    }
 }
