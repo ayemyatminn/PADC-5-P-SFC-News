@@ -31,6 +31,9 @@ public class NewsDetailsActivity extends BaseActivity implements NewsDetailsView
     @BindView(R.id.vp_news_details_images)
     ViewPager vpNewsDetailsImages;
 
+    @BindView(R.id.tv_news_details)
+    TextView tvNewsDetails;
+
 
     public static Intent newIntent(Context context,String newsId) {
         Intent intent = new Intent(context, NewsDetailsActivity.class);
@@ -86,8 +89,11 @@ public class NewsDetailsActivity extends BaseActivity implements NewsDetailsView
 
     @Override
     public void displayUIComponent(NewsVO news) {
-        TextView tvNewsDetails=findViewById(R.id.tv_news_details);
         tvNewsDetails.setText(news.getDetails());
     }
 
+    @Override
+    public void displayErrorMessage(String errorMessage) {
+
+    }
 }

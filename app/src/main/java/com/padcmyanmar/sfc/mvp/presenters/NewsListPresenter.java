@@ -18,20 +18,18 @@ import io.reactivex.subjects.PublishSubject;
  * Created by PC on 6/22/2018.
  */
 
-public class NewsListPresenter implements NewsItemDelegate{
+public class NewsListPresenter extends BasePresenter<NewsListView> implements NewsItemDelegate{
 
     private NewsListView mViews;
 
-    public NewsListPresenter(NewsListView mViews) {
-        this.mViews = mViews;
+    public NewsListPresenter(NewsListView mView) {
+        super(mView);
+        mViews=mView;
     }
+
 
     public void onFinishUIComponent(PublishSubject<List<NewsVO>> mNewsSubject){
         NewsModel.getInstance().startLoadingMMNews(mNewsSubject);
-    }
-
-    public void onCreate(){
-
     }
 
     public void onStart(){
@@ -41,22 +39,10 @@ public class NewsListPresenter implements NewsItemDelegate{
 
     }
 
-    public void onResume(){
-
-    }
-
-    public void onPause(){
-
-    }
-
     public void onStop(){
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
-    }
-
-    public void onDestroy(){
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

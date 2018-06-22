@@ -8,36 +8,13 @@ import com.padcmyanmar.sfc.mvp.views.NewsDetailsView;
  * Created by PC on 6/22/2018.
  */
 
-public class NewsDetailPresenter {
+public class NewsDetailPresenter extends BasePresenter<NewsDetailsView>{
 
-    private NewsDetailsView mView;
+    private NewsDetailsView mViews;
 
-    public NewsDetailPresenter(NewsDetailsView view) {
-        this.mView = view;
-    }
-
-    public void onCreate(){
-
-    }
-
-    public void onStart(){
-
-    }
-
-    public void onResume(){
-
-    }
-
-    public void onPause(){
-
-    }
-
-    public void onStop(){
-
-    }
-
-    public void onDestroy(){
-
+    public NewsDetailPresenter(NewsDetailsView mView) {
+        super(mView);
+        mViews=mView;
     }
 
     public void onFinishUIComponent(String newsID){

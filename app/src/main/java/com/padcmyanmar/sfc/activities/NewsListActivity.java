@@ -159,12 +159,7 @@ public class NewsListActivity extends BaseActivity
 
         rvNews.addOnScrollListener(mSmartScrollListener);
 
-        Intent intent = new Intent(getApplicationContext(), NewsDetailsActivity.class);
-        intent.putExtra("news_id", 123);
-        intent.putExtra("newsId", 123);
-        intent.putExtra("NewsId", 123);
-        intent.putExtra("NEWSID", 123);
-        startActivity(intent);
+
 
 
     }
@@ -284,14 +279,16 @@ public class NewsListActivity extends BaseActivity
         mNewsAdapter.appendNewData(newsList);
     }
 
-    @Override
-    public void displayErrorMessage(String errormsg) {
-        Snackbar.make(rvNews, errormsg, Snackbar.LENGTH_INDEFINITE).show();
-    }
+
 
     @Override
     public void lunchNewsDetailsScreen(String newsId) {
         Intent intent = NewsDetailsActivity.newIntent(getApplicationContext(),newsId);
         startActivity(intent);
+    }
+
+    @Override
+    public void displayErrorMessage(String errorMessage) {
+        Snackbar.make(rvNews, errorMessage, Snackbar.LENGTH_INDEFINITE).show();
     }
 }

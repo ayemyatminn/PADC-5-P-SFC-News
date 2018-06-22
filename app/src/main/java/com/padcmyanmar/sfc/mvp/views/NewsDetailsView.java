@@ -6,7 +6,7 @@ import com.padcmyanmar.sfc.data.vo.NewsVO;
  * Created by PC on 6/22/2018.
  */
 
-public interface NewsDetailsView {
+public interface NewsDetailsView extends BaseView {
 
     void displayUIComponent(NewsVO news);
 

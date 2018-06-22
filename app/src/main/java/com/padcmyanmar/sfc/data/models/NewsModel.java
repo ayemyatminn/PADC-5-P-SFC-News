@@ -110,6 +110,9 @@ public class NewsModel{
                     @Override
                    public void onSuccess(List<NewsVO> newsVOs) {
                         Log.d(SFCNewsApp.LOG_TAG, "onSuccess: " + newsVOs.size());
+                        for (NewsVO newsVO : newsVOs){
+                            mNewsMap.put(newsVO.getNewsId(),newsVO);
+                        }
                         mMMNewsSubject.onNext(newsVOs);
                     }
 
@@ -127,9 +130,7 @@ public class NewsModel{
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNewsDataLoaded(RestApiEvents.NewsDataLoadedEvent event) {
 
-        for (NewsVO news:event.getLoadNews()){
-            mNewsMap.put(news.getNewsId(),news);
-        }
+
 
         //mNews.addAll(event.getLoadNews());
         mmNewsPageIndex = event.getLoadedPageIndex() + 1;
